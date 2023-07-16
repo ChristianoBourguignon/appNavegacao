@@ -4,7 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import appIndex from './src/pages/Index';
+import { Ionicons } from '@expo/vector-icons';
+import Index from './src/pages/Index';
 import Contacts from './src/pages/Contacts/';
 import Information from './src/pages/Information/';
 import AppCamera from './src/pages/Camera';
@@ -13,14 +14,32 @@ import AppCamera from './src/pages/Camera';
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-function Tabs(){
+function Tabs() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={appIndex} />
-      <Tab.Screen name="Contacts" component={Contacts}/>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Index') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Contacts') {
+            iconName = focused ? 'person' : 'person-outline';
+          } else if (route.name === 'Camera') {
+            iconName = focused ? 'camera' : 'camera-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#f01c',
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
+      <Tab.Screen name="Index" component={Index} />
+      <Tab.Screen name="Contacts" component={Contacts} />
       <Tab.Screen name="Camera" component={AppCamera} />
     </Tab.Navigator>
-  )
+  );
 }
 
 export default function App() {
@@ -31,6 +50,7 @@ export default function App() {
         <Stack.Screen name="Information" component={Information} />
       </Stack.Navigator> */}
       <Drawer.Navigator>
+        <Drawer.Screen name="Index" component={Tabs} />
         <Drawer.Screen name="Contacts" component={Contacts} />
         <Drawer.Screen name="Information" component={Information} />
         <Drawer.Screen name="Camera" component={AppCamera} />
